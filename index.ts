@@ -15,11 +15,15 @@ app.get('/', (req, res) => {
   )
 })
 
+app.get('/goodbye', (req, res) => {
+  res.status(200).json({ data: { message: 'Goodbye world' } })
+})
+
 app.get('/hello', (req, res) => {
-    res.send(
-      'Hello'
-    )
-  })
+  console.log(req.query)
+  if (req.query.name) res.status(200).json({ data: { message: `Hola, ${req.query.name}` } })
+  else res.status(200).json({ data: { message: 'Hola, anonimo' } })
+})
 
 // Execute Server and Listen to PORT
 app.listen(port, () =>
