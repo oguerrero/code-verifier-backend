@@ -56,7 +56,7 @@
 				"security": [],
 				"parameters": [
 					{
-						"description": "- string | undefined",
+						"description": "- Name of user to be greeted",
 						"in": "query",
 						"name": "name",
 						"required": false,

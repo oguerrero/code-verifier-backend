@@ -1,6 +1,5 @@
 {
-    "cSpell.language": "en",
-    "cSpell.words": [
-        "dotnv"
-    ]
+  "cSpell.language": "en",
+  "cSpell.words": ["dotnv"],
+  "docwriter.progress.trackMethods": true
 }

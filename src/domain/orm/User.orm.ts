@@ -1,5 +1,5 @@
-import { LogError, LogSuccess } from 'src/utils/logger'
-import { userEntitiy } from '../entities/User.entity'
+import { LogError, LogSuccess } from '../../utils/logger'
+import { userEntity } from '../entities/User.entity'
 
 // * CRUD
 
@@ -7,9 +7,9 @@ import { userEntitiy } from '../entities/User.entity'
  * This function returns all users from the database that have not been deleted.
  * @returns An array of users
  */
-export const getAllUsers = async (): Promise<any[] | undefined> => {
+export const getAllUsersDB = async (): Promise<any[] | undefined> => {
   try {
-    let userModel = userEntitiy()
+    let userModel = userEntity()
 
     // Search all users
     return await userModel.find({ isDelete: false })
@@ -18,4 +18,49 @@ export const getAllUsers = async (): Promise<any[] | undefined> => {
   }
 }
 
-// TODO: getUserByID, getUserByEmail, deleteUser, deleteUserByID, createUser, updateUser
+// getUserByID
+export const getUserByID = async (id: string): Promise<any | undefined> => {
+  try {
+    let userModel = userEntity()
+
+    return await userModel.findById(id)
+  } catch (error) {
+    LogError(`[ORM ERROR]: Getting User By ID ${error}`)
+  }
+}
+
+// deleteUser
+export const deleteUserDB = async (id: string): Promise<any | undefined> => {
+  try {
+    let userModel = userEntity()
+    return await userModel.findByIdAndDelete(id)
+  } catch (error) {
+    LogError(`[ORM ERROR]: Deleting User By ID ${error}`)
+  }
+}
+
+// createUser
+export const createUserDB = async (user: any): Promise<any | undefined> => {
+  try {
+    let userModel = userEntity()
+    return await userModel.create(user)
+  } catch (error) {
+    LogError(`[ORM ERROR]: Creating User ${error}`)
+  }
+}
+
+// updateUser
+export const updateUserDB = async (
+  id: string,
+  user: any
+): Promise<any | undefined> => {
+  try {
+    let userModel = userEntity()
+    return await userModel.findByIdAndUpdate(id, user)
+  } catch (error) {
+    LogError(`[ORM ERROR]: Updating User ${error}`)
+  }
+}
+
+// TODO:
+// getUserByEmail

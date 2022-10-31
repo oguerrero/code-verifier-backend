@@ -8,7 +8,7 @@ import { LogSuccess } from '../utils/logger'
 export class HelloController implements IHelloController {
   /**
    * Endpoint: It returns a promise that resolves to an object with a message property
-   * @param {string} [name] - string 
+   * @param {string} [name] - Name of user to be greeted
    * @returns {BasicResponse} A Promise of a BasicResponse object.
    */
   @Get('/')
