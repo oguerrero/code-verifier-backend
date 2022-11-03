@@ -33,30 +33,6 @@ userRouter
     // Send response to client
     return res.status(response.status).send(response)
   })
-  // POST
-  .post(async (req: Request, res: Response) => {
-    // Obtain Query Param
-    let name: any = req?.query?.name
-    let email: any = req?.query?.email
-    let age: any = req?.query?.age
-
-    /* let user = {
-      name: req?.body?.name || 'default',
-      email: req?.body?.email || 'email@default.com',
-      age: req?.body?.age || 0
-    } */
-    // Controller instance
-    const controller: UserController = new UserController()
-    // Obtain Response
-    let user = {
-      name: name || 'default',
-      email: email || 'email@default.com',
-      age: age || 0
-    }
-    const response = await controller.createUser(user)
-    // Send response to client
-    return res.status(response.status).send(response)
-  })
   // UPDATE / PUT
   .put(async (req: Request, res: Response) => {
     // Obtain Query Param

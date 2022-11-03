@@ -2,7 +2,6 @@ import { LogError, LogSuccess, LogWarning } from '../utils/logger'
 import { Delete, Get, Post, Put, Query, Route, Tags } from 'tsoa'
 import { IUserController } from './interfaces'
 import {
-  createUserDB,
   deleteUserDB,
   getAllUsersDB,
   getUserByID,
@@ -24,6 +23,7 @@ export class UserController implements IUserController {
     let response: any = ''
 
     // GET USER BY ID
+    // TODO: REMOVE PASSWORDS
     if (id) {
       LogSuccess(`[/api/users] GET user by ID: ${id} request`)
       response = await getUserByID(id)
@@ -60,33 +60,8 @@ export class UserController implements IUserController {
         status: 204,
         message: `User removed from DB with ID: ${id}`
       }
-      return response
     })
-  }
-
-  /**
-   * It creates a user in the database if the user is valid
-   * @param {any} user - any = {
-   * @returns The response object is being returned.
-   */
-  @Post('/')
-  public async createUser(@Query() user: any): Promise<any> {
-    let response: any = ''
-
-    if (!user) {
-      LogWarning(`[/api/users] POST user undefined`)
-      response = {
-        status: 400,
-        message: 'Please provide a valid user to create'
-      }
-      return response
-    }
-
-    LogSuccess(`[/api/users] POST user: ${user} request`)
-    await createUserDB(user).then((r) => {
-      response = { status: 201, message: `User ${user.name} created` }
-      return response
-    })
+    return response
   }
 
   @Put('/')
@@ -111,7 +86,7 @@ export class UserController implements IUserController {
     LogSuccess(`[/api/users] PUT user: ${user.name} request`)
     await updateUserDB(id, user).then((r) => {
       response = { status: 204, message: `User ${user.name} updated` }
-      return response
     })
+    return response
   }
 }

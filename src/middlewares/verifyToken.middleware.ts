@@ -1,6 +1,10 @@
 import { NextFunction, Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 
+import dotenv from 'dotenv'
+dotenv.config()
+const secret = process.env.SECRETKEY
+
 /**
  * If the request header contains a JWT, verify it and if it's valid, continue to the next function.
  * @param {Request} req - Request - The request object
@@ -25,7 +29,8 @@ export const verifyToken = (
   }
 
   // Verify token
-  jwt.verify(token, '', (err: any, decoded: any) => {
+  // TODO: PASS SECRET
+  jwt.verify(token, secret!, (err: any, decoded: any) => {
     if (err) {
       return res
         .status(500)

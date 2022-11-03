@@ -6,6 +6,10 @@ import { userEntity } from '../entities/User.entity'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
+import dotenv from 'dotenv'
+dotenv.config()
+const secret: string | undefined = process.env.SECRETKEY
+
 // * CRUD for Users
 
 /**
@@ -53,21 +57,6 @@ export const deleteUserDB = async (id: string): Promise<any | undefined> => {
 }
 
 /**
- * This function creates a user in the database using the userEntity() function and the user object
- * passed in as an argument.
- * @param {any} user - any
- * @returns The user object
- */
-export const createUserDB = async (user: any): Promise<any | undefined> => {
-  try {
-    let userModel = userEntity()
-    return await userModel.create(user)
-  } catch (error) {
-    LogError(`[ORM ERROR]: Creating User ${error}`)
-  }
-}
-
-/**
  * This function takes in a user id and a user object and updates the user in the database.
  * @param {string} id - string - the id of the user
  * @param {any} user - any
@@ -90,39 +79,45 @@ export const registerDB = async (user: IUser): Promise<any | undefined> => {
     let userModel = userEntity()
     return await userModel.create(user)
   } catch (error) {
-    LogError(`[ORM ERROR]: Creating User ${error}`)
+    LogError(`[ORM ERROR]: Register User ${error}`)
   }
 }
 
 export const loginUserDB = async (auth: IAuth): Promise<any | undefined> => {
   try {
     let userModel = userEntity()
-    userModel.findOne(
-      { email: auth.email },
-      (err: any, user: IUser) => {
-        if (err) {
-          // TODO: USER NOT FOUND (500)
-        }
 
-        if (!user) {
-          // TODO: USER NOT FOUND (404)
-        }
+    let userFound: IUser | undefined = undefined
+    let token = undefined
 
-        // Decrypt password
-        let validPassword = bcrypt.compareSync(auth.password, user.password)
-
-        if (!validPassword) {
-          // TODO: ERROR 401
-        }
-
-        // CREATE JWT
-        // TODO: SECRET must be in .env file
-        let token = jwt.sign({ email: user.email }, 'SECRETWORD', {
-          expiresIn: '2h'
-        })
-
-        return token
+    // Get user
+    await userModel
+      .findOne({ email: auth.email })
+      .then((user: IUser) => {
+        userFound = user
       })
+      .catch((error) => {
+        console.error(`[ORM_ERROR] - USER NOT FOUND ON LOGIN`)
+        throw new Error(`[ORM_ERROR] - USER NOT FOUND ON LOGIN: ${error}`)
+      })
+
+    // Decrypt password and check if is valid
+    let validPassword = bcrypt.compareSync(auth.password, userFound!.password)
+
+    if (!validPassword) {
+      console.error(`[ORM_ERROR] - PASSWORD NOT VALID`)
+      throw new Error(`[ORM_ERROR] - PASSWORD NOT VALID ON LOGIN:`)
+    }
+
+    // CREATE JWT
+    token = jwt.sign({ email: userFound!.email }, secret!, {
+      expiresIn: '2h'
+    })
+
+    return {
+      user: userFound,
+      token
+    }
   } catch (error) {
     LogError(`[ORM ERROR]: Login ${error}`)
   }

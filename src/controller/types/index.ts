@@ -12,8 +12,14 @@ export type BasicResponse = {
  * @property {string} message - The error message
  */
 export type ErrorResponse = {
-    error: string
-    message: string
+  error: string
+  message: string
+}
+
+export type AuthResponse = {
+  status: number
+  message: string
+  token: string
 }
 
 /**
