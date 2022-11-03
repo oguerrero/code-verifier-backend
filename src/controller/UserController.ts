@@ -22,12 +22,14 @@ export class UserController implements IUserController {
   @Get('/')
   public async getUser(@Query() id?: string): Promise<any> {
     let response: any = ''
+
     // GET USER BY ID
     if (id) {
       LogSuccess(`[/api/users] GET user by ID: ${id} request`)
       response = await getUserByID(id)
       return response
     }
+
     // GET ALL USERS
     LogSuccess('[/api/users] GET all users request')
     response = await getAllUsersDB()
@@ -43,15 +45,23 @@ export class UserController implements IUserController {
   public async deleteUser(@Query() id?: string): Promise<any> {
     let response: any = ''
 
-    if (id) {
-      LogSuccess(`[/api/users] DELETE user by ID: ${id} request`)
-      await deleteUserDB(id)
-      response = { message: `User removed from DB with ID: ${id}` }
+    if (!id) {
+      LogWarning(`[/api/users] DELETE user by ID: id undefined`)
+      response = {
+        status: 400,
+        message: 'Please provide a valid ID to remove from DB'
+      }
       return response
     }
-    LogWarning(`[/api/users] DELETE user by ID: id undefined`)
-    response = { message: 'Please provide a valid ID to remove from DB' }
-    return response
+
+    LogSuccess(`[/api/users] DELETE user by ID: ${id} request`)
+    await deleteUserDB(id).then((r) => {
+      response = {
+        status: 204,
+        message: `User removed from DB with ID: ${id}`
+      }
+      return response
+    })
   }
 
   /**
@@ -63,29 +73,45 @@ export class UserController implements IUserController {
   public async createUser(@Query() user: any): Promise<any> {
     let response: any = ''
 
-    if (user) {
-      LogSuccess(`[/api/users] POST user: ${user} request`)
-      await createUserDB(user)
-      response = { message: `User ${user.name} created` }
+    if (!user) {
+      LogWarning(`[/api/users] POST user undefined`)
+      response = {
+        status: 400,
+        message: 'Please provide a valid user to create'
+      }
       return response
     }
-    LogWarning(`[/api/users] POST user undefined`)
-    response = { message: 'Please provide a valid user to create' }
-    return response
+
+    LogSuccess(`[/api/users] POST user: ${user} request`)
+    await createUserDB(user).then((r) => {
+      response = { status: 201, message: `User ${user.name} created` }
+      return response
+    })
   }
 
   @Put('/')
+  /**
+   * It updates a user in the database
+   * @param {string} id - string - the id of the user to update
+   * @param {any} user - any
+   * @returns The response object is being returned.
+   */
   public async updateUser(@Query() id: string, user: any): Promise<any> {
     let response: any = ''
 
-    if (id) {
-      LogSuccess(`[/api/users] PUT user: ${user.name} request`)
-      await updateUserDB(id, user)
-      response = { message: `User ${user.name} updated` }
+    if (!id) {
+      LogWarning(`[/api/users] PUT user undefined`)
+      response = {
+        status: 400,
+        message: 'Please provide a valid user to update'
+      }
       return response
     }
-    LogWarning(`[/api/users] PUT user undefined`)
-    response = { message: 'Please provide a valid user to update' }
-    return response
+
+    LogSuccess(`[/api/users] PUT user: ${user.name} request`)
+    await updateUserDB(id, user).then((r) => {
+      response = { status: 204, message: `User ${user.name} updated` }
+      return response
+    })
   }
 }

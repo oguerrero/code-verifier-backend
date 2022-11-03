@@ -19,7 +19,7 @@ userRouter
     // Obtain Response
     const response = await controller.getUser(id)
     // Send response to client
-    return res.send(response)
+    return res.status(200).send(response)
   })
   // DELETE
   .delete(async (req: Request, res: Response) => {
@@ -31,7 +31,7 @@ userRouter
     // Obtain Response
     const response = await controller.deleteUser(id)
     // Send response to client
-    return res.send(response)
+    return res.status(response.status).send(response)
   })
   // POST
   .post(async (req: Request, res: Response) => {
@@ -39,6 +39,12 @@ userRouter
     let name: any = req?.query?.name
     let email: any = req?.query?.email
     let age: any = req?.query?.age
+
+    /* let user = {
+      name: req?.body?.name || 'default',
+      email: req?.body?.email || 'email@default.com',
+      age: req?.body?.age || 0
+    } */
     // Controller instance
     const controller: UserController = new UserController()
     // Obtain Response
@@ -49,7 +55,7 @@ userRouter
     }
     const response = await controller.createUser(user)
     // Send response to client
-    return res.send(response)
+    return res.status(response.status).send(response)
   })
   // UPDATE / PUT
   .put(async (req: Request, res: Response) => {
@@ -58,16 +64,20 @@ userRouter
     let name: any = req?.query?.name
     let email: any = req?.query?.email
     let age: any = req?.query?.age
+
     // Controller instance
     const controller: UserController = new UserController()
+
     // Obtain Response
     let user = {
-      name: name,
-      email: email,
-      age: age 
+      name,
+      email,
+      age
     }
+
     const response = await controller.updateUser(id, user)
     // Send response to client
-    return res.send(response)
+    return res.status(response.status).send(response)
   })
+
 export default userRouter

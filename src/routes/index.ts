@@ -8,6 +8,7 @@ import helloRouter from './HelloRouter'
 import { LogInfo } from '../utils/logger'
 import goodbyeRouter from './GoodByeRouter'
 import userRouter from './UserRouter'
+import authRouter from './AuthRouter'
 
 // Server Instance
 let server = express()
@@ -29,6 +30,7 @@ server.use('/', rootRouter) // http://localhost:8000/api/
 server.use('/hello', helloRouter) // http://localhost:8000/api/hello --> HelloRouter
 server.use('/goodbye', goodbyeRouter) // http://localhost:8000/api/hello --> HelloRouter
 server.use('/users', userRouter) // http://localhost:8000/api/user --> UserRouter
+server.use('/auth', authRouter) // http://localhost:8000/api/auth --> AuthRouter
 // More Routes
 
 export default server

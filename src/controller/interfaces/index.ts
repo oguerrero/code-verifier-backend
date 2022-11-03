@@ -1,4 +1,4 @@
-import { deleteUserDB } from '@/domain/orm/User.orm'
+import { IUser } from '../../domain/entities/interfaces/User.interface'
 import { BasicResponse } from '../types'
 
 export interface IHelloController {
@@ -14,4 +14,9 @@ export interface IUserController {
   deleteUser(id?: string): Promise<any>
   createUser(user: any): Promise<any>
   updateUser(id: string, user: any): Promise<any>
+}
+
+export interface IAuthController {
+  registerUser(user: IUser): Promise<any>
+  loginUser(auth: any): Promise<any>
 }
