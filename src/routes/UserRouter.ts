@@ -57,4 +57,20 @@ userRouter
     return res.status(response.status).send(response)
   })
 
+userRouter
+  .route('/katas')
+  // GET
+  .get(verifyToken, async (req: Request, res: Response) => {
+    // Obtain Query Param
+    let id: any = req?.query?.id
+    let page: any = req?.query?.page || 1
+    let limit: any = req?.query?.limit || 10
+    // Controller instance
+    const controller: UserController = new UserController()
+    // Obtain Response
+    const response = await controller.getUserKatas(page, limit, id)
+    // Send response to client
+    return res.status(200).send(response)
+  })
+
 export default userRouter

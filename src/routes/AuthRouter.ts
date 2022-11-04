@@ -33,7 +33,8 @@ authRouter
       name,
       email,
       password: hashedPassword,
-      age
+      age,
+      katas: []
     }
 
     const controller: AuthController = new AuthController()

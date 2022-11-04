@@ -1,4 +1,4 @@
-import { IUser } from '@/domain/entities/interfaces/User.interface'
+import { IUser } from '../domain/entities/interfaces/User.interface'
 
 export type UserResponse = {
   users: IUser[]

@@ -1,14 +1,13 @@
 import { LogError, LogSuccess, LogWarning } from '../utils/logger'
-import { Delete, Get, Post, Put, Query, Route, Tags } from 'tsoa'
+import { Delete, Get, Put, Query, Route, Tags } from 'tsoa'
 import { IUserController } from './interfaces'
 import {
   deleteUserDB,
   getAllUsersDB,
   getUserByID,
+  getUserKatasDB,
   updateUserDB
 } from '../domain/orm/User.orm'
-
-// ORM - Users Collection
 
 @Route('/api/users')
 @Tags('UserController')
@@ -92,5 +91,17 @@ export class UserController implements IUserController {
       response = { status: 204, message: `User ${user.name} updated` }
     })
     return response
+  }
+
+  @Get('/katas')
+  public async getUserKatas(@Query() page: number, @Query() limit: number, @Query() id: string): Promise<any> {
+    let response: any = ''
+
+    if (id) {
+      LogSuccess(`[/api/users] GET user katas by ID: ${id} request`)
+      response = await getUserKatasDB(id, page, limit)
+
+      return response
+    }
   }
 }
