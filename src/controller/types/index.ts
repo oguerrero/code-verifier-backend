@@ -21,14 +21,3 @@ export type AuthResponse = {
   message: string
   token: string
 }
-
-/**
- * `GoodByeResponse` is an object with a `message` property of type `string` and a `date` property of
- * type `Date`.
- * @property {string} message - The message to be displayed
- * @property {Date} date - The date the message was sent
- */
-export type GoodByeResponse = {
-  message: string
-  date: Date
-}

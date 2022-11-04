@@ -2,14 +2,6 @@ import { IAuth } from '@/domain/entities/interfaces/Auth.interface'
 import { IUser } from '../../domain/entities/interfaces/User.interface'
 import { BasicResponse } from '../types'
 
-export interface IHelloController {
-  getMessage(name?: string): Promise<BasicResponse>
-}
-
-export interface IGoodByeController {
-  getMessage(name?: string): Promise<BasicResponse>
-}
-
 export interface IUserController {
   getUser(page: number, limit: number, id?: string): Promise<any>
   deleteUser(id?: string): Promise<any>
