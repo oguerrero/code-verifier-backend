@@ -1,6 +1,7 @@
 import { UserController } from '../controller/UserController'
 import express, { Request, Response } from 'express'
 import { LogInfo } from '../utils/logger'
+import { verifyToken } from '../middlewares/verifyToken.middleware'
 
 // Router from Express
 let userRouter = express.Router()
@@ -10,22 +11,22 @@ let userRouter = express.Router()
 userRouter
   .route('/')
   // GET
-  .get(async (req: Request, res: Response) => {
+  .get(verifyToken, async (req: Request, res: Response) => {
     // Obtain Query Param
     let id: any = req?.query?.id
-    LogInfo(`Query Param ${id}`)
+    let page: any = req?.query?.page || 1
+    let limit: any = req?.query?.limit || 10
     // Controller instance
     const controller: UserController = new UserController()
     // Obtain Response
-    const response = await controller.getUser(id)
+    const response = await controller.getUser(page, limit, id)
     // Send response to client
     return res.status(200).send(response)
   })
   // DELETE
-  .delete(async (req: Request, res: Response) => {
+  .delete(verifyToken, async (req: Request, res: Response) => {
     // Obtain Query Param
     let id: any = req?.query?.id
-    LogInfo(`Query Param ${id}`)
     // Controller instance
     const controller: UserController = new UserController()
     // Obtain Response
@@ -34,7 +35,7 @@ userRouter
     return res.status(response.status).send(response)
   })
   // UPDATE / PUT
-  .put(async (req: Request, res: Response) => {
+  .put(verifyToken, async (req: Request, res: Response) => {
     // Obtain Query Param
     let id: any = req?.query?.id
     let name: any = req?.query?.name

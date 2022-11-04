@@ -7,6 +7,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 import dotenv from 'dotenv'
+import { UserResponse } from '@/types/UsersResponse.type'
 dotenv.config()
 const secret: string | undefined = process.env.SECRETKEY
 
@@ -16,12 +17,35 @@ const secret: string | undefined = process.env.SECRETKEY
  * This function returns all users from the database that have not been deleted.
  * @returns An array of objects.
  */
-export const getAllUsersDB = async (): Promise<any[] | undefined> => {
+export const getAllUsersDB = async (
+  page: number,
+  limit: number
+): Promise<UserResponse | undefined> => {
   try {
     let userModel = userEntity()
 
-    // Search all users
-    return await userModel.find({ isDelete: false })
+    let response: UserResponse = {
+      users: [],
+      totalPages: 1,
+      currentPage: 1
+    }
+
+    // GET USERS
+    await userModel
+      .find({ isDeleted: false }, { password: 0, __v : 0 } )
+      .limit(limit)
+      .skip((page - 1) * limit)
+      .then((users: IUser[]) => {
+        response.users = users
+      })
+
+    // COUNTING TOTAL PAGES
+    await userModel.countDocuments().then((total: number) => {
+      response.totalPages = Math.ceil(total / limit)
+      response.currentPage = page
+    })
+
+    return response
   } catch (error) {
     LogError(`[ORM ERROR]: Getting All Users ${error}`)
   }
@@ -36,7 +60,7 @@ export const getUserByID = async (id: string): Promise<any | undefined> => {
   try {
     let userModel = userEntity()
 
-    return await userModel.findById(id)
+    return await userModel.findById(id, { password: 0, __v : 0 } )
   } catch (error) {
     LogError(`[ORM ERROR]: Getting User By ID ${error}`)
   }
