@@ -19,11 +19,10 @@ const secret: string | undefined = process.env.SECRETKEY
 
 /**
  * It gets all users from the database, and returns a response object with the users, total pages, and
- * current page.
- * </code>
+ * current page
  * @param {number} page - number,
  * @param {number} limit - number = 10
- * @returns {IUser} array - IUser
+ * @returns A promise that resolves to a UserResponse object.
  */
 export const getAllUsersDB = async (
   page: number,
@@ -106,6 +105,15 @@ export const updateUserDB = async (
   }
 }
 
+/**
+ * It takes a user ID, a page number, and a limit number, and returns a response object with the katas,
+ * total pages, and current page.
+ * </code>
+ * @param {string} id - string,
+ * @param {number} page - number,
+ * @param {number} limit - number =&gt; the number of items to be returned
+ * @returns An array of katas
+ */
 export const getUserKatasDB = async (
   id: string,
   page: number,
@@ -129,10 +137,11 @@ export const getUserKatasDB = async (
         objectIds.push(objID)
       })
 
-      await katasModel.find({ "_id": { "$in": objectIds } }).then((katas: IKata[]) => {
-        katasFound = katas
-        console.log(katasFound)
-      })
+      await katasModel
+        .find({ _id: { $in: objectIds } })
+        .then((katas: IKata[]) => {
+          katasFound = katas
+        })
     })
     response.katas = katasFound
 

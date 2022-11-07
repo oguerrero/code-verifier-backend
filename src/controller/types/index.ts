@@ -16,6 +16,12 @@ export type ErrorResponse = {
   message: string
 }
 
+/**
+ * AuthResponse is an object with three properties: status, message, and token.
+ * @property {number} status - The HTTP status code of the response.
+ * @property {string} message - The message to display to the user.
+ * @property {string} token - The token that will be used to authenticate the user.
+ */
 export type AuthResponse = {
   status: number
   message: string

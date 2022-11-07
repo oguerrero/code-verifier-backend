@@ -1,6 +1,10 @@
 import mongoose from 'mongoose'
 import { IKata } from './interfaces/Kata.interface'
 
+/**
+ * It returns a mongoose model called Katas, which is a schema of type IKata.
+ * @returns A function that returns a mongoose model.
+ */
 export const kataEntity = () => {
   let kataSchema = new mongoose.Schema<IKata>({
     name: { type: String, required: true },
