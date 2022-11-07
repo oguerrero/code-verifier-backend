@@ -1,15 +1,15 @@
 import express, { Express, Request, Response } from 'express'
 
-// Swagger
+// * Swagger
 import swaggerUi from 'swagger-ui-express'
 
-// Security
+// * Security
 import cors from 'cors'
 import helmet from 'helmet'
 
 // TODO: HTTPS
 
-// Root Router
+// * Root Router
 import router from '../routes'
 import mongoose from 'mongoose'
 
@@ -35,7 +35,7 @@ server.use('/api', router)
 // * Static Server
 server.use(express.static('public'))
 
-// TODO: Mongoose Conection
+// * Mongoose Conection
 mongoose.connect('mongodb://localhost:27017/codeVerification')
 
 // * Security config
@@ -47,7 +47,7 @@ server.use(express.urlencoded({ extended: true, limit: '50mb' }))
 server.use(express.json({ limit: '50mb' }))
 
 // * Redirection Config
-// http://localhost:8000/ --> http://localhost:8000/api/
+// ? http://localhost:8000/ --> http://localhost:8000/api/
 server.get('/', (req: Request, res: Response) => {
   res.redirect('/api')
 })

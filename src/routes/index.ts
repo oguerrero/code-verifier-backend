@@ -1,19 +1,18 @@
 // * ROOT ROUTER
-
 import express, { Request, Response } from 'express'
 import { LogInfo } from '../utils/logger'
 import userRouter from './UserRouter'
 import authRouter from './AuthRouter'
 import kataRouter from './KataRouter'
 
-// Server Instance
+// * Server Instance
 let server = express()
 
-// Router Instance
+// * Router Instance
 let rootRouter = express.Router()
 
-// Activate for requests to http://localhost:8000/api
-// GET -> http://localhost:8000/api/
+// * Activate for requests to http://localhost:8000/api
+// ? GET -> http://localhost:8000/api/
 rootRouter.get('/', (req: Request, res: Response) => {
   LogInfo('GET: http://localhost:8000/api')
   res.send(
@@ -21,11 +20,10 @@ rootRouter.get('/', (req: Request, res: Response) => {
   )
 })
 
-// Redirections to Routers
-server.use('/', rootRouter) // http://localhost:8000/api/
-server.use('/users', userRouter) // http://localhost:8000/api/user --> UserRouter
-server.use('/auth', authRouter) // http://localhost:8000/api/auth --> AuthRouter
-server.use('/katas', kataRouter) // http://localhost:8000/api/kata --> KataRouter
-// More Routes
+// * Redirections to Routers
+server.use('/', rootRouter)      // ? http://localhost:8000/api/
+server.use('/users', userRouter) // ? http://localhost:8000/api/user --> UserRouter
+server.use('/auth', authRouter)  // ? http://localhost:8000/api/auth --> AuthRouter
+server.use('/katas', kataRouter) // ? http://localhost:8000/api/kata --> KataRouter
 
 export default server
